@@ -222,8 +222,6 @@
 				scores: newScores
 			};
 
-			console.log(currentSurveyResults);
-
 			//get the location of the root page
 			var currentURL = window.location.origin;
 			var greatestDifferenceResults = 0;
@@ -231,26 +229,25 @@
 
 			$.post(currentURL + '/api/friends', currentSurveyResults, function(data) {
 				//reference the array of objects with data callback
-				//console.log(data[0].name);
 				for (var i = 0; i < data.length - 1; i++) {
 					var friendScoresArr = data[i].scores;
 					for (var j = 0; j < friendScoresArr.length; j++) {
 						greatestDifferenceResults += Math.abs(currentSurveyResults.scores[j] - friendScoresArr[j]);
 					}
 					differenceFriendResultsArr.push(greatestDifferenceResults);
+					greatestDifferenceResults = 0;
 				}
-
-				var findSmallestIndexForFriends = differenceFriendResultsArr[0];
+				console.log(differenceFriendResultsArr);
+				var findSmallestDifference = differenceFriendResultsArr[0];
+				var correctIndex = 0;
 				for (var i = 1; i < differenceFriendResultsArr.length; i++) {
-					if (differenceFriendResultsArr[i] < findSmallestIndexForFriends) {
+					if (differenceFriendResultsArr[i] < findSmallestDifference) {
 						findSmallestIndexForFriends = differenceFriendResultsArr[i];
+						correctIndex = i;
 					}
 				}
-
-				console.log(data[findSmallestIndexForFriends]);
+				console.log(data[correctIndex]);
 			});
-
-
 			return false;
 		});
 	
