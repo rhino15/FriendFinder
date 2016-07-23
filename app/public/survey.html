@@ -14,7 +14,7 @@
 					<hr>
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<form role="form" method='post'>
+							<form class="form" role="form" method='post'>
 								<div class="form-group">
 									<label for="">Name (required)</label>
 									<input type="text" class="form-control" name id="name" required>
@@ -229,7 +229,8 @@
 
 <script type="text/javascript">
 	
-	$(".submit").on("click", function() {
+	$(".form").on("submit", function(e) {
+		e.preventDefault();
 		var newScores = [];
 
 		for (var i = 1; i <= 10; i++) {
@@ -269,9 +270,9 @@
 			var image = $('<img id=bffPic>');
 			image.attr('src', data[correctIndex].photo);
 			image.appendTo('.modal-pic');
+			$('.modal-pic').parent().css('text-align', 'center');
 
 		});
-
 		$('#myModal').modal('toggle');
 		return false;
 	});

@@ -4,11 +4,11 @@ var surveyResults = [{
 	"scores":[4, 5, 5, 3, 4, 5, 5, 3, 1, 5]
 }, {
 	"name":"Jake",
-	"photo":"",
+	"photo":"https://cloud.githubusercontent.com/assets/8932227/17079930/69de26ce-50e4-11e6-9afd-3f67b43c4a49.PNG",
 	"scores":[4, 2, 5, 2, 4, 5, 4, 4, 1, 4]
 }, {
 	"name": "Barkley",
-	"photo": "",
+	"photo": "https://cloud.githubusercontent.com/assets/8932227/17079937/c8ddb040-50e4-11e6-9f89-1aa7be76e8c4.PNG",
 	"scores":[4, 3, 4, 1, 5, 2, 5, 3, 1, 5]
 }];
 
