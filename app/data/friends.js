@@ -1,6 +1,6 @@
 var surveyResults = [{
 	"name":"Rachel",
-	"photo":"",
+	"photo":"https://cloud.githubusercontent.com/assets/8932227/17075245/929a4dfe-5053-11e6-9b2f-d110fe00b895.PNG",
 	"scores":[4, 5, 5, 3, 4, 5, 5, 3, 1, 5]
 }, {
 	"name":"Jake",

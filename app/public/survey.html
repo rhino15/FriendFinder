@@ -14,7 +14,7 @@
 					<hr>
 					<div class="panel panel-default">
 						<div class="panel-body">
-							<form role="form">
+							<form role="form" method='post'>
 								<div class="form-group">
 									<label for="">Name (required)</label>
 									<input type="text" class="form-control" name id="name" required>
@@ -198,6 +198,28 @@
 								<br>
 								<button type="submit" class="btn btn-primary submit">Submit</button>
 							</form>
+							<div id="myModal" class="modal fade">
+							  <div class="modal-dialog" role="document">
+							    <div class="modal-content">
+							      <div class="modal-header">
+							        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							          <span aria-hidden="true">&times;</span>
+							        </button>
+							        <h4 class="modal-title">Modal title</h4>
+							      </div>
+							      <div class="modal-body">
+							        
+							      </div>
+							      <div class="modal-pic">
+							        
+							      </div>
+							      <div class="modal-footer">
+							        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							        <button type="button" class="btn btn-primary">Save changes</button>
+							      </div>
+							    </div><!-- /.modal-content -->
+							  </div><!-- /.modal-dialog -->
+							</div><!-- /.modal -->
 						</div>
 					</div>
 				</div>
@@ -208,47 +230,52 @@
 
 <script type="text/javascript">
 	
-		$(".submit").on("click", function() {
-			var newScores = [
+	$(".submit").on("click", function() {
+		var newScores = [];
 
-			];
-			for (var i = 1; i <= 10; i++) {
-				var selectedOption = $('input:radio[name=q'+ i + "]:checked").val();
-				newScores.push(parseInt(selectedOption));
+		for (var i = 1; i <= 10; i++) {
+			var selectedOption = $('input:radio[name=q'+ i + "]:checked").val();
+			newScores.push(parseInt(selectedOption));
+		}
+		var currentSurveyResults = {
+			name: $('#name').val().trim(),
+			photo: $('#photo').val().trim(),
+			scores: newScores
+		};
+
+		//get the location of the root page
+		var currentURL = window.location.origin;
+		var greatestDifferenceResults = 0;
+		var differenceFriendResultsArr = [];
+
+		$.post(currentURL + '/api/friends', currentSurveyResults, function(data) {
+			//reference the array of objects with data callback
+			for (var i = 0; i < data.length - 1; i++) {
+				var friendScoresArr = data[i].scores;
+				for (var j = 0; j < friendScoresArr.length; j++) {
+					greatestDifferenceResults += Math.abs(currentSurveyResults.scores[j] - friendScoresArr[j]);
+				}
+				differenceFriendResultsArr.push(greatestDifferenceResults);
+				greatestDifferenceResults = 0;
 			}
-			var currentSurveyResults = {
-				name: $('#name').val().trim(),
-				photo: $('#photo').val().trim(),
-				scores: newScores
-			};
-
-			//get the location of the root page
-			var currentURL = window.location.origin;
-			var greatestDifferenceResults = 0;
-			var differenceFriendResultsArr = [];
-
-			$.post(currentURL + '/api/friends', currentSurveyResults, function(data) {
-				//reference the array of objects with data callback
-				for (var i = 0; i < data.length - 1; i++) {
-					var friendScoresArr = data[i].scores;
-					for (var j = 0; j < friendScoresArr.length; j++) {
-						greatestDifferenceResults += Math.abs(currentSurveyResults.scores[j] - friendScoresArr[j]);
-					}
-					differenceFriendResultsArr.push(greatestDifferenceResults);
-					greatestDifferenceResults = 0;
+			var findSmallestDifference = differenceFriendResultsArr[0];
+			var correctIndex = 0;
+			for (var i = 1; i < differenceFriendResultsArr.length; i++) {
+				if (differenceFriendResultsArr[i] < findSmallestDifference) {
+					findSmallestIndexForFriends = differenceFriendResultsArr[i];
+					correctIndex = i;
 				}
-				console.log(differenceFriendResultsArr);
-				var findSmallestDifference = differenceFriendResultsArr[0];
-				var correctIndex = 0;
-				for (var i = 1; i < differenceFriendResultsArr.length; i++) {
-					if (differenceFriendResultsArr[i] < findSmallestDifference) {
-						findSmallestIndexForFriends = differenceFriendResultsArr[i];
-						correctIndex = i;
-					}
-				}
-				console.log(data[correctIndex]);
-			});
-			return false;
+			}
+			$('.modal-body').text("Your BFF is " + data[correctIndex].name);
+			var image = $('<img id=bffPic>');
+			image.attr('src', data[correctIndex].photo);
+			image.appendTo('.modal-pic');
+
 		});
+
+		$('#myModal').modal('toggle');
+		return false;
+	});
+
 	
 </script>
